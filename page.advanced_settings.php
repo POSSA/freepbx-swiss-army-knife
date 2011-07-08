@@ -7,6 +7,13 @@ if(isset($_REQUEST['dial_plan'])) {
 }
 $db->query($sql);
 
+if(isset($_REQUEST['dial_plan_exp'])) {
+	$sql = "UPDATE sak_settings SET value = '1' WHERE var_name='dial_plan_exp'";
+} else {
+	$sql = "UPDATE sak_settings SET value = '0' WHERE var_name='dial_plan_exp'";
+}
+$db->query($sql);
+
 $sak_settings =& $db->getAssoc("SELECT var_name, value FROM sak_settings");
 ?>
 <h3>FreePBX Swiss Army Knife Settings</h3>
@@ -25,7 +32,7 @@ $sak_settings =& $db->getAssoc("SELECT var_name, value FROM sak_settings");
   <tr>
     <td width="26%">Allow Exporting of Dial Plans (into CSV)</td>
     <td width="74%">
-      <input type="checkbox" name="dial_plan_exp" id="dial_plan_exp" <?=$sak_settings['dial_plan_exp'] ? 'checked' : ''?> disabled>
+      <input type="checkbox" name="dial_plan_exp" id="dial_plan_exp" <?=$sak_settings['dial_plan_exp'] ? 'checked' : ''?>>
     </td>
   </tr>
   <tr>

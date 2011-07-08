@@ -3,26 +3,35 @@
 function sak_hook_core($viewing_itemid, $target_menuid) {
 	global $db;
 	$sak_settings =& $db->getAssoc("SELECT var_name, value FROM sak_settings");
-	if (($target_menuid == 'routing') && ($sak_settings['dial_plan']))	{
-		$html = '<tr><td colspan="2"><h5>';
-		$html .= _("Bulk Dial Patterns");
-		$html .= '<hr></h5></td></tr>';
-		$html .= '<tr><td colspan="2">This Effectively Disables the \'Dial Plan Wizard\' Below. <br/>Entering Anything in the \'Dial Plan Wizard\' will be ignored</td></tr>';
-		$html .= '<tr>';
-		$html .= '<td><a href="#" class="info">';
-		$html .= _("Source").'<span>'._("Each Pattern Should Be Entered On A New Line").'.</span></a>:</td>';
-		$html .= '<td><textarea name="bulk_patterns" rows="10" cols="40">';
-		if(isset($_REQUEST['extdisplay'])) {
-			$sql = 'SELECT `match_pattern_pass` FROM `outbound_route_patterns` WHERE `route_id` = '. $_REQUEST['extdisplay'];
-			$result = $db->query($sql);
-			while($row =& $result->fetchRow(DB_FETCHMODE_ASSOC)) {
-				$html .= $row['match_pattern_pass']."\n";
-			}
+	$html = '';
+	if ($target_menuid == 'routing') {
+		if($sak_settings['dial_plan']) {
+			$html = '<tr><td colspan="2"><h5>';
+			$html .= _("Bulk Dial Patterns");
+			$html .= '<hr></h5></td></tr>';
+			$html .= '<tr><td colspan="2">This Effectively Disables the \'Dial Plan Wizard\' Below. <br/>Entering Anything in the \'Dial Plan Wizard\' will be ignored</td></tr>';
+			$html .= '<tr>';
+			$html .= '<td><a href="#" class="info">';
+			$html .= _("Source").'<span>'._("Each Pattern Should Be Entered On A New Line").'.</span></a>:</td>';
+			$html .= '<td><textarea name="bulk_patterns" rows="10" cols="40">';
+			if(isset($_REQUEST['extdisplay'])) {
+				$sql = 'SELECT `match_pattern_pass` FROM `outbound_route_patterns` WHERE `route_id` = '. $_REQUEST['extdisplay'];
+				$result = $db->query($sql);
+				while($row =& $result->fetchRow(DB_FETCHMODE_ASSOC)) {
+					$html .= $row['match_pattern_pass']."\n";
+				}
 			
+			}
+			$html .= '</textarea></td></tr>';
 		}
-		$html .= '</textarea></td></tr>';
-		return $html;
+		if($sak_settings['dial_plan_exp']) {
+			$html = '<tr><td colspan="2"><h5>';
+			$html .= _("Export Dial Patterns");
+			$html .= '<hr></h5></td></tr>';
+			$html .= '<tr><td colspan="2">Click Here to Export All Dial Patterns for this Route</td></tr>';
+		}
 	}
+	return $html;
 }
 
 function sak_hookProcess_core($viewing_itemid, $request) {
