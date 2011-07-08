@@ -1,0 +1,23 @@
+<module>
+	<rawname>sak</rawname>
+	<repo>standard</repo>
+	<name>Swiss Army Knife</name>
+	<version>1.0alpha2</version>
+	<publisher>Andrew Nagy</publisher>
+	<license>MPLv1.1</license>
+	<type>tool</type>
+	<category>Swiss Army Knife!!</category>
+	<menuitems>
+		<blacklist_mod needsenginedb="yes" sort="1">Blacklist (Modified)</blacklist_mod>
+		<advanced_settings sort="9">Settings</advanced_settings>
+	</menuitems>
+	 <description>I miss a feature. So it winds up here</description>
+	<changelog>
+	</changelog>
+	<depends>
+		<module>core ge 2.5.1.2</module>
+		<module>blacklist</module>
+	</depends>
+	<location>release/2.9/blacklist-2.9.0.1.tgz</location>
+	<md5sum>42b34d3e46f2f239b34101ad6b94acb8</md5sum>
+</module>

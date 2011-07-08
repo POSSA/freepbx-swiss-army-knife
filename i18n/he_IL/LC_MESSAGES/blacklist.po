@@ -1,0 +1,66 @@
+# Hebrew version for BlackList FreePBX Module.
+# Copyright (C) 2006
+# This file is distributed under the same license as the PACKAGE package.
+# Shimi <shimi@shimi.net>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: FreePBX 2.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-02-27 17:34+0100\n"
+"PO-Revision-Date: 2006-10-17 17:30+0300\n"
+"Last-Translator: Shimi <shimi@shimi.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Blacklist"
+msgstr ""
+
+msgid "Inbound Call Control"
+msgstr ""
+
+msgid "Blacklist a number"
+msgstr ""
+
+msgid "Remove a number from the blacklist"
+msgstr ""
+
+msgid "Blacklist the last caller"
+msgstr ""
+
+msgid "Blacklist entry"
+msgstr "רשומת רשימה שחורה"
+
+msgid "deleted"
+msgstr "נמחקה"
+
+msgid "Blacklist entries"
+msgstr "רשומות רשימה שחורה"
+
+msgid "Number"
+msgstr "מספר"
+
+msgid "Delete"
+msgstr "מחק"
+
+msgid "Edit"
+msgstr "ערוך"
+
+msgid "Add or replace entry"
+msgstr "הוסף או החלף רשומה"
+
+msgid "Number:"
+msgstr "מספר:"
+
+msgid "Enter the number you want to block"
+msgstr "הכנס את המספר שברצונך לחסום"
+
+msgid "Block Unknown/Blocked Caller ID:"
+msgstr ""
+
+msgid "Check here to catch Unknown/Blocked Caller ID"
+msgstr ""
+
+msgid "Submit Changes"
+msgstr ""
