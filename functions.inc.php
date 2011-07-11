@@ -24,11 +24,11 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 			}
 			$html .= '</textarea></td></tr>';
 		}
-		if($sak_settings['dial_plan_exp']) {
+		if(($sak_settings['dial_plan_exp']) && ($viewing_itemid != '')) {
 			$html = '<tr><td colspan="2"><h5>';
 			$html .= _("Export Dial Patterns");
 			$html .= '<hr></h5></td></tr>';
-			$html .= '<tr><td colspan="2">Click Here to Export All Dial Patterns for this Route</td></tr>';
+			$html .= '<tr><td colspan="2">Click <a href="config.php?type=tool&amp;display=sak_advanced_settings&amp;quietmode=1&amp;orid='.$viewing_itemid.'" target="_blank">Here</a> to Export All Dial Patterns for this Route</td></tr>';
 		}
 	}
 	return $html;

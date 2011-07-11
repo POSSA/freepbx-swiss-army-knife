@@ -1,21 +1,25 @@
 <?php
-
-if(isset($_REQUEST['dial_plan'])) {
-	$sql = "UPDATE sak_settings SET value = '1' WHERE var_name='dial_plan'";
+if(isset($_REQUEST['orid'])) {
+	include('includes/export.php');
 } else {
-	$sql = "UPDATE sak_settings SET value = '0' WHERE var_name='dial_plan'";
-}
-$db->query($sql);
+	if(isset($_REQUEST['button'])) {
+		if(isset($_REQUEST['dial_plan'])) {
+			$sql = "UPDATE sak_settings SET value = '1' WHERE var_name='dial_plan'";
+		} else {
+			$sql = "UPDATE sak_settings SET value = '0' WHERE var_name='dial_plan'";
+		}
+		$db->query($sql);
 
-if(isset($_REQUEST['dial_plan_exp'])) {
-	$sql = "UPDATE sak_settings SET value = '1' WHERE var_name='dial_plan_exp'";
-} else {
-	$sql = "UPDATE sak_settings SET value = '0' WHERE var_name='dial_plan_exp'";
-}
-$db->query($sql);
+		if(isset($_REQUEST['dial_plan_exp'])) {
+			$sql = "UPDATE sak_settings SET value = '1' WHERE var_name='dial_plan_exp'";
+		} else {
+			$sql = "UPDATE sak_settings SET value = '0' WHERE var_name='dial_plan_exp'";
+		}
+		$db->query($sql);
+	}
 
-$sak_settings =& $db->getAssoc("SELECT var_name, value FROM sak_settings");
-?>
+	$sak_settings =& $db->getAssoc("SELECT var_name, value FROM sak_settings");
+	?>
 <h3>FreePBX Swiss Army Knife Settings</h3>
 <form name="form1" method="post" action="">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -42,3 +46,6 @@ $sak_settings =& $db->getAssoc("SELECT var_name, value FROM sak_settings");
 </table>
 <input type="submit" name="button" id="button" value="Submit">
 </form>
+<?php
+}
+?>

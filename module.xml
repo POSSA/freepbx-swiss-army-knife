@@ -2,14 +2,14 @@
 	<rawname>sak</rawname>
 	<repo>standard</repo>
 	<name>Swiss Army Knife</name>
-	<version>1.0alpha2</version>
+	<version>1.0</version>
 	<publisher>Andrew Nagy</publisher>
 	<license>MPLv1.1</license>
 	<type>tool</type>
 	<category>Swiss Army Knife!!</category>
 	<menuitems>
-		<blacklist_mod needsenginedb="yes" sort="1">Blacklist (Modified)</blacklist_mod>
-		<advanced_settings sort="9">Settings</advanced_settings>
+		<sak_blacklist_mod needsenginedb="yes" sort="1">Blacklist (Modified)</sak_blacklist_mod>
+		<sak_advanced_settings sort="9">Settings</sak_advanced_settings>
 	</menuitems>
 	 <description>I miss a feature. So it winds up here</description>
 	<changelog>
