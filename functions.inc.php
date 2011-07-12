@@ -21,20 +21,11 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 				$sql = 'SELECT match_pattern_prefix, match_pattern_pass, match_cid, prepend_digits FROM outbound_route_patterns WHERE route_id = '. $_REQUEST['extdisplay'];
 				$result = $db->query($sql);
 				while($row =& $result->fetchRow(DB_FETCHMODE_ASSOC)) {
-					/***
-					$prepend = ($row['prepend_digits'] != '') ? '('.$row['prepend_digits'].')' : '';
-					$match_pattern_prefix = ($row['match_pattern_prefix'] != '') ? '+'.$row['match_pattern_prefix'].'|' : '';
+					$prepend = ($row['prepend_digits'] != '') ? $row['prepend_digits'].'+' : '';
+					$match_pattern_prefix = ($row['match_pattern_prefix'] != '') ? $row['match_pattern_prefix'].'|' : '';
 					$match_cid = ($row['match_cid'] != '') ? '/'.$row['match_cid'] : '';
-					
-					if(($prepend != '') OR ($match_pattern_prefix != '') OR ($match_cid != '')) {
-						$html .= $prepend . $match_pattern_prefix . '[' . $row['match_pattern_pass'] . $match_cid . "]\n";
-					} else {
-						$html .= $prepend . $match_pattern_prefix . $row['match_pattern_pass']."\n";
-					}	
-					*/
-					
-					$html .= $row['match_pattern_pass']."\n";
-									
+
+					$html .= $prepend . $match_pattern_prefix . $row['match_pattern_pass'] . $match_cid . "\n";
 				}
 			}
 			$html .= '</textarea></td></tr>';
@@ -59,53 +50,45 @@ function sak_hookProcess_core($viewing_itemid, $request) {
 		$_POST['pattern_pass'] = "";
 		$data = explode("\n",$request['bulk_patterns']);
 		
-		$prepend = '/\((.*)?\)/';
-		$prefix = '/\+(.*?)\|/';
-		$match_pattern = '/\[(.*?)\//';
-		$callerid = '/\/(.*?)\]/';
+		$prepend = '/^([^+]*)\+/';
+		$prefix = '/^([^|]*)\|/';
+		$match_pattern = '/([^/]*)/';
+		$callerid = '/\/(.*)$/';
+
 		$i = 0;
-		/***
+
 		foreach($data as $list) {
-			$found = FALSE;
+			if (preg_match('/^\s*$/', $list)) {
+				continue;
+			}
+
+			$pp[$i] = $pf[$i] = $cid[$i] = '';
+
+			if (preg_match($prepend, $list, $matches)) {
+				$pp[$i] = $matches[1];
+				$list = preg_replace($prepend, '', $list);
+			}
 			
-			$found = preg_match($prepend, $list, $matches) ? TRUE : FALSE;
-			$pp[$i] = (isset($matches[1])) ? $matches[1] : '';
-			$list = preg_replace($prepend, '', $list);
+			if (preg_match($prefix, $list, $matches)) {
+				$pf[$i] = $matches[1];
+				$list = preg_replace($prefix, '', $list);
+			}
 			
-			$found = preg_match($prefix, $list, $matches);
-			preg_match($prefix, $list, $matches);
-			$pf[$i] = (isset($matches[1])) ? $matches[1] : '';
-			$list = preg_replace($prefix, '', $list);
-			
-			$found = preg_match($callerid, $list, $matches);
-			preg_match($callerid, $list, $matches);
-			$cid[$i] = (isset($matches[1])) ? $matches[1] : '';
-			$list = preg_replace($callerid, '', $list);
-			
-			$found = preg_match($match_pattern, $list, $matches);
-			preg_match($match_pattern, $list, $matches);
-			$mp[$i] = (isset($matches[1])) ? $matches[1] : '';
-						
-			$mp[$i] = $found ? $mp[$i] : $list;
-			$i++;
-		}
-		*/
-		
-		foreach($data as $list) {			
-			$pp[$i] = '';
-			$pf[$i] = '';
-			$cid[$i] = '';
+			if (preg_match($callerid, $list, $matches)) {
+				$cid[$i] = $matches[1];
+				$list = preg_replace($callerid, '', $list);
+			}
 			
 			$mp[$i] = $list;
-						
+
 			$i++;
 		}
-		
-		$_POST['pattern_pass'] = $mp;
+
 		$_POST['prepend_digit'] = $pp;
 		$_POST['pattern_prefix'] = $pf;
+		$_POST['pattern_pass'] = $mp;
 		$_POST['match_cid'] = $cid;
-		
+
 		/*
 		$sql = 'DELETE FROM `outbound_route_patterns` WHERE `outbound_route_patterns`.`route_id` = '.$_REQUEST['extdisplay'];
 		$db->query($sql);
