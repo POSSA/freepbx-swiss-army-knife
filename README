@@ -1,0 +1,12 @@
+FreePBX Swiss Army Knife
+========================
+
+What is FreePBX Swiss Army Knife?
+---------------------------------
+This is a simple module I created to help supplement some missing/requested features by users for FreePBX. Though I am an active developer for FreePBX this module is not supported by FreePBX 
+
+What's it do?
+-------------
+-Export a CSV file of your Dial Patterns from your Outbound Dial Plans to use in importing into other Dial Plans on other machines or for your own personal use
+-Use Old Textbox Dial Patterns for Outbound Routes (all of the prefix(|), callerid(/) and prepends(+) work as you fondly remember them from the pre 2.8 days.)
+-A Modified Blacklist Module that allows you to enter any value not just numbers
