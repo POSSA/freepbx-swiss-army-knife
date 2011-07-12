@@ -29,7 +29,7 @@ if($ast_ge_16) {
 
 isset($_REQUEST['editnumber'])?$editnumber = $_REQUEST['editnumber']:$editnumber='';
 
-$dispnum = "blacklist_mod"; //used for switch on config.php
+$dispnum = "sak_blacklist_mod"; //used for switch on config.php
     
 //if submitting form, update database
 

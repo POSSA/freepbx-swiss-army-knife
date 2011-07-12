@@ -2,7 +2,7 @@
 	<rawname>sak</rawname>
 	<repo>standard</repo>
 	<name>Swiss Army Knife</name>
-	<version>1.0</version>
+	<version>1.0.1</version>
 	<publisher>Andrew Nagy</publisher>
 	<license>MPLv1.1</license>
 	<type>tool</type>
@@ -13,6 +13,8 @@
 	</menuitems>
 	 <description>I miss a feature. So it winds up here</description>
 	<changelog>
+		*1.0.1* Cleaned up the display of Outbound Routes so its not so confusing, fixed page display issue for blacklist module
+		*1.0* Initial Release
 	</changelog>
 	<depends>
 		<module>core ge 2.5.1.2</module>
