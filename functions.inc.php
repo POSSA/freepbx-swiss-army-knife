@@ -156,16 +156,10 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 
 	$(document).ready(function(){
 		addCustomField('X','X','X','X');
-<<<<<<< HEAD
-		$('#inscode').hide();
-		$('.dialpatterns').hide();
-		$('#dial-pattern-add').hide();
-=======
 		$('.dialpatterns').hide();
 		$('#dial-pattern-add').hide();
 		$('#inscode').attr('onChange', '');
 		$('#inscode').bind('change', function(){insertIntoBulkPatterns();});
->>>>>>> 493997f6716fec4a36bf45c5a3748c7f46154be2
 	});
 </script>
 xENDx;
