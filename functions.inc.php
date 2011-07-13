@@ -36,6 +36,7 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 		addCustomField('X','X','X','X');
 		$('#inscode').hide();
 		$('.dialpatterns').hide();
+		$('#dial-pattern-add').hide();
 	});
 </script>
 xENDx;
