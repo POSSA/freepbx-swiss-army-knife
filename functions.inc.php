@@ -17,10 +17,9 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 			$html .= '<td><a href="#" class="info">';
 			$html .= _("Source").'<span>'._("Each Pattern Should Be Entered On A New Line").'.</span></a>:</td>';
 			$html .= '<td><textarea name="bulk_patterns" rows="10" cols="40">';
-			if(isset($_REQUEST['extdisplay'])) {
-				$sql = 'SELECT match_pattern_prefix, match_pattern_pass, match_cid, prepend_digits FROM outbound_route_patterns WHERE route_id = '. $_REQUEST['extdisplay'];
-				$result = $db->query($sql);
-				while($row =& $result->fetchRow(DB_FETCHMODE_ASSOC)) {
+			if(isset($_REQUEST['extdisplay']) && $_REQUEST['extdisplay'] != '') {
+				$dial_patterns = core_routing_getroutepatternsbyid($_REQUEST['extdisplay']);
+				foreach ($dial_patterns as $row) {
 					$prepend = ($row['prepend_digits'] != '') ? $row['prepend_digits'].'+' : '';
 					$match_pattern_prefix = ($row['match_pattern_prefix'] != '') ? $row['match_pattern_prefix'].'|' : '';
 					$match_cid = ($row['match_cid'] != '') ? '/'.$row['match_cid'] : '';
