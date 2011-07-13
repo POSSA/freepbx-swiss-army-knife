@@ -161,6 +161,11 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 		$('#inscode').attr('onChange', '');
 		$('#inscode').bind('change', function(){insertIntoBulkPatterns();});
 	});
+	
+	//Hijack into submit to combine the old dial patterns with the new in the future. Could still technically do both with server-side
+	$('#routeEdit').submit(function() {
+	  return true;
+	});
 </script>
 xENDx;
 		}
