@@ -29,6 +29,14 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 			}
 			$html .= '</textarea></td></tr>';
 			$html .= '<tr><td colspan="2">&nbsp;</td></tr>';
+			$html .= <<<xENDx
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.dialpatterns tr[id!=last_row]').hide();
+		addCustomField('X','X','X','X');
+	});
+</script>
+xENDx;
 		}
 		if(($sak_settings['dial_plan_exp']) && ($viewing_itemid != '')) {
 			//$html .= '<tr><td colspan="2"><h5>';
