@@ -14,7 +14,6 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 			//$html .= '<tr><td colspan="2"><h5>';
 			//$html .= _("Bulk Dial Patterns");
 			//$html .= '<hr></h5></td></tr>';
-			$html .= '<tr><td colspan="2">This Effectively Disables the \'Dial Plan Wizard\' Below. <br/>Entering Anything in the \'Dial Plan Wizard\' will be ignored</td></tr>';
 			$html .= '<tr>';
 			$html .= '<td><a href="#" class="info">';
 			$html .= _("Source").'<span>'._("Each Pattern Should Be Entered On A New Line").'.</span></a>:</td>';
