@@ -4,7 +4,7 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 	global $db;
 	$sak_settings =& $db->getAssoc("SELECT var_name, value FROM sak_settings");
 	$html = '';
-
+	$new_dial_patterns_section = '';
 	$extdisplay=isset($_REQUEST['extdisplay'])?$_REQUEST['extdisplay']:'';
 	$action = isset($_REQUEST['action'])?$_REQUEST['action']:'';
 
@@ -113,7 +113,7 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 			$pat_info = _("411,311");
 			$pat_emerg = _("911");
 			//$html .= $dp_html;
-			$new_dial_patterns_section = '<tr><td><a href="#" class="info">Source<span>Each Pattern Should Be Entered On A New Line.</span></a>:</td><td><textarea name="bulk_patterns" id="bulk_patterns" rows="10" cols="40">'.implode("\\n", $dialpattern_list).'</textarea></td></tr><tr><td colspan="2">&nbsp;</td></tr>';
+			$new_dial_patterns_section .= '<tr><td><a href="#" class="info">Source<span>Each Pattern Should Be Entered On A New Line.</span></a>:</td><td><textarea name="bulk_patterns" id="bulk_patterns" rows="10" cols="40">'.implode("\\n", $dialpattern_list).'</textarea></td></tr><tr><td colspan="2">&nbsp;</td></tr>';
 			$html .= <<<xENDx
 <script type="text/javascript">
 	function insertIntoBulkPatterns() {
@@ -159,8 +159,6 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 
 	$(document).ready(function(){
 		addCustomField('X','X','X','X');
-		//$('.dialpatterns').hide();
-		$('.dialpatterns').replaceWith('$new_dial_patterns_section');
 		$('#dial-pattern-add').hide();
 		$('#inscode').attr('onChange', '');
 		$('#inscode').bind('change', function(){insertIntoBulkPatterns();});
@@ -174,19 +172,16 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 xENDx;
 		}
 		if(($sak_settings['dial_plan_exp']) && ($viewing_itemid != '')) {
-			//$html .= '<tr><td colspan="2"><h5>';
-			//$html .= _("Export Dial Patterns");
-			//$html .= '<hr></h5></td></tr>';
-			$html .= '<tr><td colspan="2"><a href="config.php?type=tool&amp;display=sak_advanced_settings&amp;quietmode=1&amp;orid='.$viewing_itemid.'" target="_blank">Click Here to Export All Dial Patterns for this Route</a>';
-			$html .= '</td></tr>';
-			$html .= '<tr><td colspan="2">&nbsp;</td></tr>';
-			$html .= "<script type=\"text/javascript\">
-				$(document).ready(function(){
-					//$('.dialpatterns').prepend('<p>Test</p>');
-				});
-			</script>";
-			
+			$new_dial_patterns_section .= '<tr><td colspan="2">&nbsp;</td></tr><tr><td colspan="2"><a href="config.php?type=tool&amp;display=sak_advanced_settings&amp;quietmode=1&amp;orid='.$viewing_itemid.'" target="_blank">Click Here to Export All Dial Patterns for this Route</a></td></tr>';
 		}
+	}
+	if($new_dial_patterns_section != '') {
+		$type = $sak_settings['dial_plan'] ? 'replaceWith' : 'append';
+		$html .= "<script type=\"text/javascript\">
+			$(document).ready(function(){
+				$('.dialpatterns').".$type."('".$new_dial_patterns_section."');
+			});
+		</script>";		
 	}
 	return $html;
 }
