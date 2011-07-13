@@ -19,7 +19,7 @@
 		*1.0* Initial Release
 	</changelog>
 	<depends>
-		<module>core ge 2.5.1.2</module>
+		<module>core ge 2.8</module>
 		<module>blacklist</module>
 	</depends>
 	<location>release/2.9/blacklist-2.9.0.1.tgz</location>
