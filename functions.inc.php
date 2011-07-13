@@ -4,8 +4,10 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 	global $db;
 	$sak_settings =& $db->getAssoc("SELECT var_name, value FROM sak_settings");
 	$html = '';
-	
-	
+
+	$extdisplay=isset($_REQUEST['extdisplay'])?$_REQUEST['extdisplay']:'';
+	$action = isset($_REQUEST['action'])?$_REQUEST['action']:'';
+
 	if ($target_menuid == 'routing') {
 		$html .= '<tr><td colspan="2">&nbsp;</td></tr>';
 		if($sak_settings['dial_plan']) {
@@ -16,27 +18,154 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 			$html .= '<tr>';
 			$html .= '<td><a href="#" class="info">';
 			$html .= _("Source").'<span>'._("Each Pattern Should Be Entered On A New Line").'.</span></a>:</td>';
-			$html .= '<td><textarea name="bulk_patterns" rows="10" cols="40">';
-			if(isset($_REQUEST['extdisplay']) && $_REQUEST['extdisplay'] != '') {
+			$html .= '<td><textarea name="bulk_patterns" id="bulk_patterns" rows="10" cols="40">';
+
+			$dialpattern_list = array();
+			if ($_REQUEST['bulk_patterns']) {
+				$dialpattern_list = split("\n", trim($_REQUEST['bulk_patterns']));
+			} else if($extdisplay != '') {
 				$dial_patterns = core_routing_getroutepatternsbyid($_REQUEST['extdisplay']);
 				foreach ($dial_patterns as $row) {
 					$prepend = ($row['prepend_digits'] != '') ? $row['prepend_digits'].'+' : '';
 					$match_pattern_prefix = ($row['match_pattern_prefix'] != '') ? $row['match_pattern_prefix'].'|' : '';
 					$match_cid = ($row['match_cid'] != '') ? '/'.$row['match_cid'] : '';
 
-					$html .= $prepend . $match_pattern_prefix . $row['match_pattern_pass'] . $match_cid . "\n";
+					$dialpattern_list[] = $prepend . $match_pattern_prefix . $row['match_pattern_pass'] . $match_cid;
 				}
 			}
+
+			// Duplicated from core/page.routing.php
+			// Unfortunately those values are not obtainable here
+			if ($action == 'populatenpanxx') {
+                if (preg_match("/^([2-9]\d\d)-?([2-9]\d\d)$/", $_REQUEST["npanxx"], $matches)) {
+                    // first thing we do is grab the exch:
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_URL, "http://www.localcallingguide.com/xmllocalprefix.php?npa=".$matches[1]."&nxx=".$matches[2]);
+                    curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Linux; FreePBX Local Trunks Configuration)");
+                    $str = curl_exec($ch);
+                    curl_close($ch);
+
+                    // quick 'n dirty - nabbed from PEAR
+                    require_once($GLOBALS['amp_conf']['AMPWEBROOT'] . '/admin/modules/core/XML_Parser.php');
+                    require_once($GLOBALS['amp_conf']['AMPWEBROOT'] . '/admin/modules/core/XML_Unserializer.php');
+
+                    $xml = new xml_unserializer;
+                    $xml->unserialize($str);
+                    $xmldata = $xml->getUnserializedData();
+
+                    $hash_filter = array(); //avoid duplicates
+                    if (isset($xmldata['lca-data']['prefix'])) {
+                        // we do the loops separately so patterns are grouped together
+                        
+                        // match 1+NPA+NXX (dropping 1)
+                        foreach ($xmldata['lca-data']['prefix'] as $prefix) {
+                          if (isset($hash_filter['1'.$prefix['npa'].$prefix['nxx']])) {
+                            continue;
+                          } else {
+                            $hash_filter['1'.$prefix['npa'].$prefix['nxx']] = true;
+                          }
+                          $dialpattern_list[] = '1'.htmlspecialchars($prefix['npa'].$prefix['nxx']).'XXXX';
+                        }
+                        // match NPA+NXX
+                        foreach ($xmldata['lca-data']['prefix'] as $prefix) {
+                          if (isset($hash_filter[$prefix['npa'].$prefix['nxx']])) {
+                            continue;
+                          } else {
+                            $hash_filter[$prefix['npa'].$prefix['nxx']] = true;
+                          }
+                          $dialpattern_list[] = htmlspecialchars($prefix['npa'].$prefix['nxx']).'XXXX';
+                        }
+                        // match 7-digits
+                        foreach ($xmldata['lca-data']['prefix'] as $prefix) {
+                          if (isset($hash_filter[$prefix['nxx']])) {
+                            continue;
+                          } else {
+                            $hash_filter[$prefix['nxx']] = true;
+                          }
+                          $dialpattern_list[] = htmlspecialchars($prefix['nxx']).'XXXX';
+                        }
+                        unset($hash_filter);
+                    } else {
+                        //$errormsg = _("Error fetching prefix list for: "). $_REQUEST["npanxx"];
+                    }
+                } else {
+                    // Will get caught the second time loaded
+                    // what a horrible error message... :p
+                    //$errormsg = _("Invalid format for NPA-NXX code (must be format: NXXNXX)");
+                }
+        
+                // Will get caught the second time loaded
+                /*if (isset($errormsg)) {
+                    echo "<script language=\"javascript\">alert('".addslashes($errormsg)."');</script>";
+                    unset($errormsg);
+                }*/
+			}
+
+			$html .= implode("\n", $dialpattern_list)."\n";
 			$html .= '</textarea></td></tr>';
 			$html .= '<tr><td colspan="2">&nbsp;</td></tr>';
+
+			$pat_local = _("NXXXXXX");
+			$pat_local10 = _("NXXXXXX,NXXNXXXXXX");
+			$pat_tollfree = _("1800NXXXXXX,1888NXXXXXX,1877NXXXXXX,1866NXXXXXX,1855NXXXXXX");
+			$pat_ld = _("1NXXNXXXXXX");
+			$pat_int = _("011.");
+			$pat_info = _("411,311");
+			$pat_emerg = _("911");
 			$html .= <<<xENDx
 <script type="text/javascript">
+	function insertIntoBulkPatterns() {
+		// Mostly copied from core/page.routing.php
+		code = document.getElementById('inscode').value;
+		insert = '';
+		switch(code) {
+			case "local":
+				insert = '{$pat_local}';
+			break;
+			case "local10":
+				insert = '{$pat_local10}';
+			break;
+			case 'tollfree':
+				insert = '{$pat_tollfree}';
+			break;
+			case "ld":
+				insert = '{$pat_ld}';
+			break;
+			case "int":
+				insert = '{$pat_int}';
+			break;
+			case 'info':
+				insert = '{$pat_info}';
+			break;
+			case 'emerg':
+				insert = '{$pat_emerg}';
+			break;
+			case 'lookup':
+				populateLookup();
+				insert = '';
+			break;
+			case 'csv':
+				$('#pattern_file').show().click();
+				return true;
+			break;
+		}
+
+		$('#bulk_patterns').val($('#bulk_patterns').val()+insert.split(',').join("\\n")+"\\n");
+	}
+
 	$(document).ready(function(){
-		$('.dialpatterns tr[id!=last_row]').hide();
 		addCustomField('X','X','X','X');
+<<<<<<< HEAD
 		$('#inscode').hide();
 		$('.dialpatterns').hide();
 		$('#dial-pattern-add').hide();
+=======
+		$('.dialpatterns').hide();
+		$('#dial-pattern-add').hide();
+		$('#inscode').attr('onChange', '');
+		$('#inscode').bind('change', function(){insertIntoBulkPatterns();});
+>>>>>>> 493997f6716fec4a36bf45c5a3748c7f46154be2
 	});
 </script>
 xENDx;
