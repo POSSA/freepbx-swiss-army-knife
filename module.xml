@@ -2,7 +2,7 @@
 	<rawname>sak</rawname>
 	<repo>standard</repo>
 	<name>Swiss Army Knife</name>
-	<version>1.1.1</version>
+	<version>1.1.2</version>
 	<publisher>Andrew Nagy</publisher>
 	<license>MPLv1.1</license>
 	<type>tool</type>
@@ -13,6 +13,7 @@
 	</menuitems>
 	 <description>I miss a feature. So it winds up here</description>
 	<changelog>
+		*1.1.2* dward: makes dial pattern wizards drop down work
 		*1.1.1* dward: Fixed Blank Page, Helped to Disable 'new dial patterns that will use this route'
 		*1.1.0* dward adjusted the display and parsing of numbers with prepend/prefix/callerid
 		*1.0.1* Cleaned up the display of Outbound Routes so its not so confusing, fixed page display issue for blacklist module
