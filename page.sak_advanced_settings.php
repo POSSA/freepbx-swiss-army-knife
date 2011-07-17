@@ -49,3 +49,6 @@ if(isset($_REQUEST['orid'])) {
 <?php
 }
 ?>
+<hr>
+Find Help/Support: <a href="http://pbxinaflash.com/forum/showthread.php?t=10802" target="_blank">PBX in a Flash Forums</a><br/>
+Check out our Repository: <a href="https://github.com/tm1000/freepbx-swiss-army-knife" target="_blank">GitHub</a><br/>
