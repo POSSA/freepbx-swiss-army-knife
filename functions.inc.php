@@ -1,5 +1,6 @@
 <?php
 
+
 function sak_hook_core($viewing_itemid, $target_menuid) {
 	global $db;
 	$sak_settings =& $db->getAssoc("SELECT var_name, value FROM sak_settings");
@@ -7,6 +8,10 @@ function sak_hook_core($viewing_itemid, $target_menuid) {
 	$new_dial_patterns_section = '';
 	$extdisplay=isset($_REQUEST['extdisplay'])?$_REQUEST['extdisplay']:'';
 	$action = isset($_REQUEST['action'])?$_REQUEST['action']:'';
+
+	if ($target_menuid == 'trunks') {
+
+	}
 
 	if ($target_menuid == 'routing') {
 		$html .= '<tr><td colspan="2">&nbsp;</td></tr>';
@@ -183,6 +188,7 @@ xENDx;
 			});
 		</script>";		
 	}
+	
 	return $html;
 }
 

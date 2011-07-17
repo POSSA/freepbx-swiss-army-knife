@@ -51,6 +51,15 @@ if($new_install) {
     out('Version Identified as '. $ver);
 }
 
+/*
+CREATE TABLE  `asterisk`.`sak_bwlist` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`nn` VARCHAR( 50 ) NOT NULL ,
+`type` VARCHAR( 10 ) NOT NULL ,
+`sort` INT NOT NULL
+) ENGINE = MYISAM
+*/
+
 
 function sak_install_xml2array($url, $get_attributes = 1, $priority = 'tag') {
     $contents = "";
