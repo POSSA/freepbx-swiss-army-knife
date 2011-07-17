@@ -1,0 +1,12 @@
+#!/usr/bin/php -q
+<?php
+	require('config.php');
+	require('/var/lib/asterisk/agi-bin/phpagi.php');
+
+	$agi = new AGI();
+	$thenumber = $agi->request['agi_callerid'];
+		
+	file_put_contents('/var/www/html/admin/modules/sak/agi/test.txt',$thenumber);
+	
+	//$agi->hangup();
+	
