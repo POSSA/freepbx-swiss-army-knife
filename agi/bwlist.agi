@@ -5,8 +5,34 @@
 
 	$agi = new AGI();
 	$thenumber = $agi->request['agi_callerid'];
-		
-	file_put_contents('/var/www/html/admin/modules/sak/agi/test.txt',$thenumber);
+				
+	$sql = 'SELECT * FROM `sak_bwlist` ORDER BY `sort` ASC';
 	
-	//$agi->hangup();
+	$list = $db->getAll($sql,array(), DB_FETCHMODE_ASSOC);
+	
+	$matchfound = false;
+	foreach($list as $data) {
+		$count = 0;
+		if(preg_match("/".$data['nn']."/",$thenumber,$matches)) {
+			if($matches[0] == $thenumber) {				
+				if($data['permit']) {
+					$matchfound = true;
+					$sql = 'SELECT count FROM sak_bwlist WHERE id = '.$data['id'];
+					$count = $db->getOne($sql);
+					$count++;
+					$sql = "UPDATE sak_bwlist SET count = '".$count."' WHERE id = ".$data['id'];
+					$db->query($sql);		
+					break;
+				} else {
+					$agi->hangup();
+					break;
+				}
+			}
+		}
+	}
+	
+	if(!$matchfound) {
+		$agi->hangup();
+	}
+	
 	

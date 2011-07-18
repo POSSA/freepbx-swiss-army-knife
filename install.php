@@ -47,6 +47,44 @@ if($new_install) {
 	        (1, 'dial_plan', '0'),
 	        (2, 'dial_plan_exp', '0')";
 	$db->query($sql);
+	
+	out('Creating New Black/White List Table');
+	$sql = "CREATE TABLE IF NOT EXISTS `sak_bwlist` (
+	  `id` int(11) NOT NULL auto_increment,
+	  `nn` varchar(50) NOT NULL,
+	  `permit` int(1) NOT NULL,
+	  `sort` int(11) NOT NULL,
+	  `count` int(11) NOT NULL default '0',
+	  PRIMARY KEY  (`id`)
+	) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10";
+	$db->query($sql);
+
+    out('Inserting Data Into Table');
+	$sql = "INSERT INTO `sak_bwlist` (`id`, `nn`, `permit`, `sort`, `count`) VALUES (0, '.*', 1, 0, 0)";
+	$db->query($sql);
+	
+	$sql = 'UPDATE `asterisk`.`sak_bwlist` SET `id` = \'0\' WHERE `sak_bwlist`.`id` = 10 LIMIT 1;';
+	$db->query($sql);
+} elseif($ver < '2.0') {
+	out('Version Identified as '. $ver);
+    
+    out('Creating New Black/White List Table');
+	$sql = "CREATE TABLE IF NOT EXISTS `sak_bwlist` (
+	  `id` int(11) NOT NULL auto_increment,
+	  `nn` varchar(50) NOT NULL,
+	  `permit` int(1) NOT NULL,
+	  `sort` int(11) NOT NULL,
+	  `count` int(11) NOT NULL default '0',
+	  PRIMARY KEY  (`id`)
+	) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10";
+	$db->query($sql);
+
+    out('Inserting Data Into Table');
+	$sql = "INSERT INTO `sak_bwlist` (`id`, `nn`, `permit`, `sort`, `count`) VALUES (0, '.*', 1, 0, 0)";
+	$db->query($sql);
+	
+	$sql = 'UPDATE `asterisk`.`sak_bwlist` SET `id` = \'0\' WHERE `sak_bwlist`.`id` = 10 LIMIT 1;';
+	$db->query($sql);
 } else {
     out('Version Identified as '. $ver);
 }

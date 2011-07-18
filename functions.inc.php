@@ -324,4 +324,36 @@ function sak_blacklist_chk($post){
 	return true;
 }
 
-?>
+function sak_hookGet_config($engine) {
+	// TODO: integrating with direct extension <-> DID association
+	// TODO: add option to avoid callerid lookup if the telco already supply a callerid name (GosubIf)
+	global $ext;  // is this the best way to pass this?
+
+	switch($engine) {	
+		case "asterisk":
+			// Code from modules/core/functions.inc.php core_get_config inbound routes
+			$didlist = core_did_list();
+			if (is_array($didlist)) {
+				foreach ($didlist as $item) {
+
+					$exten = trim($item['extension']);
+					$cidnum = trim($item['cidnum']);
+
+					if ($cidnum != '' && $exten == '') {
+						$exten = 's';
+						$pricid = ($item['pricid']) ? true:false;
+					} else if (($cidnum != '' && $exten != '') || ($cidnum == '' && $exten == '')) {
+						$pricid = true;
+					} else {
+						$pricid = false;
+					}
+					$context = ($pricid) ? "ext-did-0001":"ext-did-0002";
+
+					$exten = (empty($exten)?"s":$exten);
+					$exten = $exten.(empty($cidnum)?"":"/".$cidnum); //if a CID num is defined, add it
+
+					$ext->splice($context, $exten, 2, new ext_agi(dirname(__FILE__).'/agi/bwlist.agi'));				}
+			} // else no DID's defined. Not even a catchall.
+			break;
+	}
+}
