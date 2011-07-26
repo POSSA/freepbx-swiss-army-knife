@@ -63,7 +63,7 @@ if($new_install) {
 	$sql = "INSERT INTO `sak_bwlist` (`id`, `nn`, `permit`, `sort`, `count`) VALUES (0, '.*', 1, 0, 0)";
 	$db->query($sql);
 	
-	$sql = 'UPDATE `asterisk`.`sak_bwlist` SET `id` = \'0\' WHERE `sak_bwlist`.`id` = 10 LIMIT 1;';
+	$sql = 'UPDATE `asterisk`.`sak_bwlist` SET `id` = \'0\' WHERE `sak_bwlist`.`nn` = \'.*\' LIMIT 1;';
 	$db->query($sql);
 } elseif($ver < '2.0') {
 	out('Version Identified as '. $ver);
@@ -83,7 +83,7 @@ if($new_install) {
 	$sql = "INSERT INTO `sak_bwlist` (`id`, `nn`, `permit`, `sort`, `count`) VALUES (0, '.*', 1, 0, 0)";
 	$db->query($sql);
 	
-	$sql = 'UPDATE `asterisk`.`sak_bwlist` SET `id` = \'0\' WHERE `sak_bwlist`.`id` = 10 LIMIT 1;';
+	$sql = 'UPDATE `asterisk`.`sak_bwlist` SET `id` = \'0\' WHERE `sak_bwlist`.`nn` = \'.*\' LIMIT 1;';
 	$db->query($sql);
 } else {
     out('Version Identified as '. $ver);
