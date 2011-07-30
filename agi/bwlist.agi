@@ -26,6 +26,10 @@ foreach($list as $data) {
 				$db->query($sql);		
 				break;
 			} else {
+                                $agi->answer();
+                                $agi->exec("WAIT 1"); //wait 1 second
+                                $agi->exec("Zapteller"); //wait 1 second
+                                $agi->stream_file('ss-noservice');
 				$agi->hangup();
 				break;
 			}
@@ -34,6 +38,10 @@ foreach($list as $data) {
 }
 
 if(!$matchfound) {
+        $agi->answer();
+        $agi->exec("WAIT 1"); //wait 1 second
+        $agi->exec("Zapteller()"); //wait 1 second
+        $agi->stream_file('ss-noservice');
 	$agi->hangup();
 }
 	
