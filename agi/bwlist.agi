@@ -26,6 +26,12 @@ foreach($list as $data) {
 				$db->query($sql);		
 				break;
 			} else {
+                            	$matchfound = true;
+				$sql = 'SELECT count FROM sak_bwlist WHERE id = '.$data['id'];
+				$count = $db->getOne($sql);
+				$count++;
+				$sql = "UPDATE sak_bwlist SET count = '".$count."' WHERE id = ".$data['id'];
+				$db->query($sql);
                                 $agi->answer();
                                 $agi->exec("WAIT 1"); //wait 1 second
                                 $agi->exec("Zapteller"); //wait 1 second
