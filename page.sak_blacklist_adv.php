@@ -6,7 +6,7 @@ if((isset($_REQUEST['submit'])) && ((!empty($_REQUEST['nn'])) OR (isset($_REQUES
 		$_REQUEST['nn'] = (isset($_REQUEST['nn'])) ? $_REQUEST['nn'] : '.*';
 		$db->query("UPDATE sak_bwlist SET nn = '".$_REQUEST['nn']."', permit = '".$permit."'  WHERE id = ".$_REQUEST['edit']);	
 	} else {
-		$db->query("INSERT INTO sak_bwlist (nn, permit, sort) VALUES ('".$_REQUEST['nn']."', '".$permit."', 1)");
+		$db->query("INSERT INTO sak_bwlist (nn, permit, sort) VALUES ('".addslashes($_REQUEST['nn'])."', '".$permit."', 1)");
 	}
 }
 
